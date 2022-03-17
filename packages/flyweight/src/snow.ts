@@ -1,6 +1,10 @@
+import SnowFlyweight from "./snow-flywieght";
 import { getRandomInt } from "./utils";
 
 export default class Snow {
+  /**
+   * extrinsic state, unique state
+   */
   private x: number = 0;
   private y: number = 0;
   private velocity = {
@@ -8,27 +12,24 @@ export default class Snow {
     y: 0,
   };
 
-  private alpha: number = 0;
-  private rgba = "rgba(255, 255, 255, 1)";
-  private size: number = 0;
+  snowType: SnowFlyweight;
 
-  constructor(width: number, height: number) {
-    this.reset(width, height);
+  constructor(x: number, y: number, snowType: SnowFlyweight) {
+    this.x = x;
+    this.y = y;
+
+    this.snowType = snowType;
+
+    this.velocity = {
+      x: getRandomInt(20, 60) / 10,
+      y: getRandomInt(10, 30) / 10,
+    };
   }
 
   draw = (ctx: CanvasRenderingContext2D, width: number, height: number) => {
     this.updatePosition(width, height);
-    this.drawPath(ctx);
-  };
 
-  private drawPath = (ctx: CanvasRenderingContext2D) => {
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    ctx.fillStyle = this.rgba;
-    ctx.strokeStyle = this.rgba;
-    ctx.fill();
-    ctx.stroke();
-    ctx.closePath();
+    this.snowType.draw(ctx, this.x, this.y);
   };
 
   private updatePosition = (width: number, height: number) => {
@@ -52,11 +53,6 @@ export default class Snow {
   private reset = (width: number, height: number) => {
     this.x = getRandomInt(width * -0.25, width);
     this.y = getRandomInt(height * -0.25, height * 0.8);
-    this.size = getRandomInt(5, 25) / 10;
-
-    // this.alpha = getRandomInt(2, 8) / 10;
-    this.alpha = 0.5;
-    this.rgba = `rgba(255, 255, 255, ${this.alpha})`;
 
     this.velocity = {
       x: getRandomInt(20, 60) / 10,

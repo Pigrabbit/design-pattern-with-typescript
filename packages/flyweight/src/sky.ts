@@ -1,4 +1,6 @@
 import Snow from "./snow";
+import SnowFlyweightFactory from "./snow-flyweight-factory";
+import { getRandomInt } from "./utils";
 
 export class Sky {
   private ctx: CanvasRenderingContext2D | null = null;
@@ -10,10 +12,31 @@ export class Sky {
 
   constructor(canvasEl: HTMLCanvasElement) {
     this.ctx = canvasEl.getContext("2d");
+    this.placeSnow(canvasEl);
 
-    this.handleResize();
     window.addEventListener("resize", this.handleResize);
   }
+
+  placeSnow = (canvasEl: HTMLCanvasElement) => {
+    canvasEl.width = window.innerWidth;
+    canvasEl.height = window.innerHeight;
+
+    this.width = canvasEl.width;
+    this.height = canvasEl.height;
+
+    for (let i = 0; i < this.numSnows; i += 1) {
+      const x = getRandomInt(this.width * -0.25, this.width);
+      const y = getRandomInt(this.height * -0.25, this.height * 0.8);
+
+      const alpha = getRandomInt(2, 8) / 10;
+      const size = getRandomInt(5, 25) / 10;
+
+      const snowType = SnowFlyweightFactory.getSnowTypes({ alpha, size });
+      const snow = new Snow(x, y, snowType);
+
+      this.snows.push(snow);
+    }
+  };
 
   draw = () => {
     this.animationLoop();
@@ -47,7 +70,10 @@ export class Sky {
 
     if (this.snows.length === this.numSnows) return;
     for (let i = 0; i < this.numSnows; i += 1) {
-      this.snows.push(new Snow(this.width, this.height));
+      const x = getRandomInt(this.width * -0.25, this.width);
+      const y = getRandomInt(this.height * -0.25, this.height * 0.8);
+      // this.snows.push(new Snow(this.width, this.height));
+      this.snows.push(new Snow(x, y, { alpha: 0.5, size: 2 }));
     }
   };
 }
