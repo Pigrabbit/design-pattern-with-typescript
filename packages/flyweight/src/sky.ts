@@ -5,7 +5,7 @@ import { getRandomInt } from "./utils";
 export class Sky {
   private ctx: CanvasRenderingContext2D | null = null;
   private snows: Snow[] = [];
-  private readonly numSnows = 2000;
+  private readonly numSnows = 1000;
 
   private width = 0;
   private height = 0;
@@ -72,8 +72,14 @@ export class Sky {
     for (let i = 0; i < this.numSnows; i += 1) {
       const x = getRandomInt(this.width * -0.25, this.width);
       const y = getRandomInt(this.height * -0.25, this.height * 0.8);
-      // this.snows.push(new Snow(this.width, this.height));
-      this.snows.push(new Snow(x, y, { alpha: 0.5, size: 2 }));
+      
+      const alpha = getRandomInt(2, 8) / 10;
+      const size = getRandomInt(5, 25) / 10;
+
+      const snowType = SnowFlyweightFactory.getSnowTypes({ alpha, size });
+      const snow = new Snow(x, y, snowType);
+
+      this.snows.push(snow);
     }
   };
 }

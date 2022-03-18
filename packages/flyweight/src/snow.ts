@@ -1,4 +1,4 @@
-import SnowFlyweight from "./snow-flywieght";
+import SnowFlyweight from "./snow-flyweight";
 import { getRandomInt } from "./utils";
 
 export default class Snow {
@@ -21,7 +21,7 @@ export default class Snow {
     this.snowType = snowType;
 
     this.velocity = {
-      x: getRandomInt(20, 60) / 10,
+      x: getRandomInt(20, 50) / 10,
       y: getRandomInt(10, 30) / 10,
     };
   }

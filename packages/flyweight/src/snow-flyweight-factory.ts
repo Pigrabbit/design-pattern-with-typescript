@@ -1,4 +1,4 @@
-import SnowFlyweight from "./snow-flywieght";
+import SnowFlyweight from "./snow-flyweight";
 
 /**
  * Flyweight Factory Class
